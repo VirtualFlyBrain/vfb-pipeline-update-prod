@@ -1,0 +1,1 @@
+CALL ebi.spot.neo4j2owl.owl2Import('https://raw.githubusercontent.com/matentzn/ontologies/master/smalltest.owl','n')
