@@ -1,6 +1,8 @@
 #!/bin/sh
 DEFAULT='https://raw.githubusercontent.com/matentzn/ontologies/master/smalltest.owl'
 
+set -e
+
 echo "********Import Prod************"
 QUERY=/opt/VFB/import_ontology_transaction.neo4j
 CYPHER=/opt/VFB/load_prod.cypher
