@@ -9,10 +9,10 @@ RUN mkdir -p /opt/VFB/backup
 
 RUN apk update && apk add tar gzip curl wget
 
-COPY loadKB.sh /opt/VFB/
+COPY process.sh /opt/VFB/
 COPY import_ontology_transaction.neo4j /opt/VFB/
 COPY load_prod.cypher /opt/VFB/
 
-RUN chmod +x /opt/VFB/loadKB.sh
+RUN chmod +x /opt/VFB/process.sh
 
-ENTRYPOINT ["/opt/VFB/loadKB.sh"]
+ENTRYPOINT ["/opt/VFB/process.sh"]

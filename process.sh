@@ -1,10 +1,14 @@
 #!/bin/sh
 
-DEFAULT='https://raw.githubusercontent.com/matentzn/ontologies/master/smalltest.owl'
-
 set -e
 
-echo "********Import Prod************"
+echo "process started"
+echo "Start: vfb-pipeline-update-prod"
+echo "VFBTIME:"
+date
+
+DEFAULT='https://raw.githubusercontent.com/matentzn/ontologies/master/smalltest.owl'
+
 QUERY=/opt/VFB/import_ontology_transaction.neo4j
 CYPHER=/opt/VFB/load_prod.cypher
 
@@ -29,4 +33,8 @@ echo "cat ${CYPHER} | cypher-shell -u ${user} -p ${password} -a ${server} --form
 curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${QUERY}"
 #cat ${CYPHER} | cypher-shell -u ${user} -p ${password} -a ${server} --format plain
 
+
+echo "End: vfb-pipeline-update-prod"
+echo "VFBTIME:"
+date
 echo "process complete"
