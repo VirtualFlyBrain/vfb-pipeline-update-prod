@@ -1,7 +1,5 @@
 {
   "statements" : [ {
-    "statement" : "CALL ebi.spot.neo4j2owl.owl2Import('https://raw.githubusercontent.com/matentzn/ontologies/master/smalltest.owl','n')"
+    "statement" : "CALL ebi.spot.neo4j2owl.owl2Import('N2O_ONTOLOGY_URL','N2O_CONFIG')"
   } ]
 }
-#https://raw.githubusercontent.com/monarch-ebi-dev/ontologies/master/vfb-triplestore-dump-2019-06-04.rdf.gz
-#https://raw.githubusercontent.com/matentzn/ontologies/master/smalltest.owl
