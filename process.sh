@@ -26,7 +26,14 @@ cat ${QUERY}
 #echo "cat ${CYPHER} | cypher-shell -u ${user} -p ${password} -a ${server} --format plain"
 #curl -i -X POST --data "@${QUERY}" -H "Content-Type: application/json" --user ${user}:${password} -X POST ${server}/db/data/transaction/commit
 # https://neo4j.com/docs/http-api/3.5/actions/begin-and-commit-a-transaction-in-one-request/
-curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${QUERY}"
+RESULT=$(curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${QUERY}")
+
+if [[ ${RESULT} == *"ERROR:"* ]]; then
+    echo "Loading ontology into PROD failed.. "
+    echo ${RESULT}
+    exit 1
+fi
+
 curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d '{"statements": [{"statement": "CREATE INDEX ON :Individual(short_form)"}]}'
 curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d '{"statements": [{"statement": "CREATE INDEX ON :Class(short_form)"}]}'
 
