@@ -28,10 +28,10 @@ cat ${QUERY}
 # https://neo4j.com/docs/http-api/3.5/actions/begin-and-commit-a-transaction-in-one-request/
 RESULT=$(curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${QUERY}")
 
-echo ${RESULT}
+#echo ${RESULT}
 
-if [[ ${RESULT} == *"ERROR:"* ]]; then
-    echo "Loading ontology into PROD failed.. "
+if [[ ${RESULT} != *"\"\"\],\"meta\""* ]]; then
+    echo "Loading ontology into PDB failed.. "
     echo ${RESULT}
     exit 1
 fi
