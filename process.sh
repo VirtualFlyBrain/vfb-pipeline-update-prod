@@ -11,6 +11,7 @@ DEFAULT_URL='N2O_ONTOLOGY_URL'
 DEFAULT_CONFIG='N2O_CONFIG'
 
 QUERY=/opt/VFB/import_ontology_transaction.neo4j
+SET_INDICES_QUERY=/opt/VFB/pdb_set_indices.neo4j
 
 echo "* Preparing command *"
 
@@ -36,8 +37,9 @@ if [[ ${RESULT} != *"\"\"\],\"meta\""* ]]; then
     exit 1
 fi
 
-curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d '{"statements": [{"statement": "CREATE INDEX ON :Individual(short_form)"}]}'
-curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d '{"statements": [{"statement": "CREATE INDEX ON :Class(short_form)"}]}'
+#curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d '{"statements": [{"statement": "CREATE INDEX ON :Individual(short_form)"}]}'
+#curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d '{"statements": [{"statement": "CREATE INDEX ON :Class(short_form)"}]}'
+curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${SET_INDICES_QUERY}"
 
 
 #cat ${CYPHER} | cypher-shell -u ${user} -p ${password} -a ${server} --format plain
