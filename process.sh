@@ -7,35 +7,47 @@ echo "Start: vfb-pipeline-update-prod"
 echo "VFBTIME:"
 date
 
-DEFAULT_URL='N2O_ONTOLOGY_URL'
-DEFAULT_CONFIG='N2O_CONFIG'
-
-QUERY=/opt/VFB/import_ontology_transaction.neo4j
 SET_INDICES_QUERY=/opt/VFB/pdb_set_indices.neo4j
 
 echo "* Preparing command *"
 
-CMD1='s,'${DEFAULT_URL}','${IMPORT}',g'
-sed -i ${CMD1} ${QUERY}
-CMD2='s,'${DEFAULT_CONFIG}','${IMPORT_CONFIG}',g'
-sed -i ${CMD2} ${QUERY}
 
-echo ""
-echo "* Running query *"
-cat ${QUERY}
-#echo "curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d \"@${QUERY}\""
-#echo "cat ${CYPHER} | cypher-shell -u ${user} -p ${password} -a ${server} --format plain"
-#curl -i -X POST --data "@${QUERY}" -H "Content-Type: application/json" --user ${user}:${password} -X POST ${server}/db/data/transaction/commit
-# https://neo4j.com/docs/http-api/3.5/actions/begin-and-commit-a-transaction-in-one-request/
-RESULT=$(curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${QUERY}")
-
-#echo ${RESULT}
-
-if [[ ${RESULT} != *"\"\"\],\"meta\""* ]]; then
-    echo "Loading ontology into PDB failed.. "
+RESULT=$(curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d '{"statements": [{"statement": "CREATE INDEX ON :Entity(iri)"}]}')
+if [[ ${RESULT} != *"\"errors\":[]"* ]]; then
+    echo "Loading nodes into PDB failed.. "
     echo ${RESULT}
     exit 1
 fi
+
+echo "Loading nodes"
+for i in $CSV_IMPORT_TRANSACTIONS/nodes_*.neo4j; do
+    echo $i
+    date
+    [ -f "$i" ] || break
+    QUERY="$i"
+    cat $QUERY
+    RESULT=$(curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${QUERY}")
+    if [[ ${RESULT} != *"\"errors\":[]"* ]]; then
+        echo "Loading nodes into PDB failed.. "
+        echo ${RESULT}
+        exit 1
+    fi
+done
+
+echo "Loading relationships"
+for i in $CSV_IMPORT_TRANSACTIONS/relationship_*.neo4j; do
+    echo $i
+    date
+    [ -f "$i" ] || break
+    QUERY="$i"
+    cat $QUERY
+    RESULT=$(curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${QUERY}")
+    if [[ ${RESULT} != *"\"errors\":[]"* ]]; then
+        echo "Loading relationships into PDB failed.. "
+        echo ${RESULT}
+        exit 1
+    fi
+done
 
 #curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d '{"statements": [{"statement": "CREATE INDEX ON :Individual(short_form)"}]}'
 #curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d '{"statements": [{"statement": "CREATE INDEX ON :Class(short_form)"}]}'
