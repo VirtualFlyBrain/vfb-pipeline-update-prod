@@ -27,11 +27,12 @@ for i in $CSV_IMPORT_TRANSACTIONS/nodes_*.neo4j; do
     QUERY="$i"
     cat $QUERY
     RESULT=$(curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${QUERY}")
-    if [[ ${RESULT} != *"\"errors\":[]"* ]]; then
-        echo "Loading nodes into PDB failed.. "
-        echo ${RESULT}
-        exit 1
-    fi
+    echo $RESULT
+    #if [[ ${RESULT} != *"\"errors\":[]"* ]]; then
+    #    echo "Loading nodes into PDB failed.. "
+    #    echo ${RESULT}
+    #    exit 1
+    #fi
 done
 
 echo "Loading relationships"
@@ -42,11 +43,12 @@ for i in $CSV_IMPORT_TRANSACTIONS/relationship_*.neo4j; do
     QUERY="$i"
     cat $QUERY
     RESULT=$(curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${QUERY}")
-    if [[ ${RESULT} != *"\"errors\":[]"* ]]; then
-        echo "Loading relationships into PDB failed.. "
-        echo ${RESULT}
-        exit 1
-    fi
+    echo $RESULT
+    #if [[ ${RESULT} != *"\"errors\":[]"* ]]; then
+    #    echo "Loading relationships into PDB failed.. "
+    #    echo ${RESULT}
+    #    exit 1
+    #fi
 done
 
 #curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d '{"statements": [{"statement": "CREATE INDEX ON :Individual(short_form)"}]}'
