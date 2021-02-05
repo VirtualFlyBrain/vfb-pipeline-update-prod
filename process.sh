@@ -7,6 +7,10 @@ echo "Start: vfb-pipeline-update-prod"
 echo "VFBTIME:"
 date
 
+## get remote configs
+echo "Sourcing remote config"
+source ${CONF_DIR}/config.env
+
 SET_INDICES_QUERY=/opt/VFB/pdb_set_indices.neo4j
 
 echo "* Preparing command *"
