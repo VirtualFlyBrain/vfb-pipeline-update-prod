@@ -8,8 +8,8 @@ ENV CONF_BASE=/opt/conf_base
 ENV CONF_DIR=${CONF_BASE}/config/update-prod
 
 # A set of transactions to be run one by one. A directory with *.neo4j files
-VOLUME /transactions
-ENV CSV_IMPORT_TRANSACTIONS=/transactions
+VOLUME /input
+ENV CSV_IMPORT_TRANSACTIONS=/input/dumps/csv_imports/transactions
 
 RUN mkdir -p /opt/VFB/backup
 
