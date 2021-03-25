@@ -11,7 +11,7 @@ date
 echo "Sourcing remote config"
 source ${CONF_DIR}/config.env
 
-SET_INDICES_QUERY=/opt/VFB/pdb_set_indices.neo4j
+SET_INDICES_QUERY=${CONF_DIR}/pdb_set_indices.neo4j
 
 echo "* Preparing command *"
 RESULT=$(curl -i -X POST ${server}/db/neo4j/tx/commit -u ${user}:${password} -H 'Content-Type: application/json' -d '{"statements": [{"statement": "CREATE INDEX ON :Entity(iri)"}]}')

@@ -25,7 +25,7 @@ RUN cd "${CONF_BASE_TEMP}" && cd $(ls -d */|head -n 1) && cp -R . $CONF_BASE && 
 
 COPY process.sh /opt/VFB/
 COPY import_ontology_transaction.neo4j /opt/VFB/
-COPY pdb_set_indices.neo4j /opt/VFB/
+# COPY pdb_set_indices.neo4j /opt/VFB/
 
 RUN chmod +x /opt/VFB/process.sh
 
