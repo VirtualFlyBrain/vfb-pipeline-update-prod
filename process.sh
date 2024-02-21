@@ -19,6 +19,8 @@ if [[ ${RESULT} != *"\"errors\":[]"* ]]; then
     exit 1
 fi
 
+curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${SET_INDICES_QUERY}"
+
 echo "Loading nodes"
 for i in $CSV_IMPORT_TRANSACTIONS/nodes_*.neo4j; do
     echo $i
