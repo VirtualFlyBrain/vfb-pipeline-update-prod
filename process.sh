@@ -53,9 +53,41 @@ for i in $CSV_IMPORT_TRANSACTIONS/relationship_*.neo4j; do
     #fi
 done
 
+echo "Reloading Class nodes"
+for i in $CSV_IMPORT_TRANSACTIONS/nodes_Class.neo4j; do
+    echo $i
+    date
+    [ -f "$i" ] || break
+    QUERY="$i"
+    cat $QUERY
+    RESULT=$(curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${QUERY}")
+    echo $RESULT
+    #if [[ ${RESULT} != *"\"errors\":[]"* ]]; then
+    #    echo "Loading nodes into PDB failed.. "
+    #    echo ${RESULT}
+    #    exit 1
+    #fi
+done
+
+echo "Reloading Individual nodes"
+for i in $CSV_IMPORT_TRANSACTIONS/nodes_Individual.neo4j; do
+    echo $i
+    date
+    [ -f "$i" ] || break
+    QUERY="$i"
+    cat $QUERY
+    RESULT=$(curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${QUERY}")
+    echo $RESULT
+    #if [[ ${RESULT} != *"\"errors\":[]"* ]]; then
+    #    echo "Loading nodes into PDB failed.. "
+    #    echo ${RESULT}
+    #    exit 1
+    #fi
+done
+
 #curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d '{"statements": [{"statement": "CREATE INDEX ON :Individual(short_form)"}]}'
 #curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d '{"statements": [{"statement": "CREATE INDEX ON :Class(short_form)"}]}'
-curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${SET_INDICES_QUERY}"
+#curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${SET_INDICES_QUERY}"
 
 
 #cat ${CYPHER} | cypher-shell -u ${user} -p ${password} -a ${server} --format plain
