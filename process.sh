@@ -7,19 +7,19 @@ echo "Start: vfb-pipeline-update-prod"
 echo "VFBTIME:"
 date
 
-SET_INDICES_QUERY=/opt/VFB/pdb_set_indices.neo4j
+# SET_INDICES_QUERY=/opt/VFB/pdb_set_indices.neo4j
 
-echo "* Preparing command *"
+# echo "* Preparing command *"
 
 
-RESULT=$(curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d '{"statements": [{"statement": "CREATE INDEX ON :Entity(iri)"}]}')
-if [[ ${RESULT} != *"\"errors\":[]"* ]]; then
-    echo "Loading nodes into PDB failed.. "
-    echo ${RESULT}
-    exit 1
-fi
+# RESULT=$(curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d '{"statements": [{"statement": "CREATE INDEX ON :Entity(iri)"}]}')
+# if [[ ${RESULT} != *"\"errors\":[]"* ]]; then
+#     echo "Loading nodes into PDB failed.. "
+#     echo ${RESULT}
+#     exit 1
+# fi
 
-curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${SET_INDICES_QUERY}"
+# curl -i -X POST ${server}/db/data/transaction/commit -u ${user}:${password} -H 'Content-Type: application/json' -d "@${SET_INDICES_QUERY}"
 
 echo "Loading nodes"
 for i in $CSV_IMPORT_TRANSACTIONS/nodes_*.neo4j; do
